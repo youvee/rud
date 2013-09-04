@@ -76,6 +76,8 @@ def getUsername(user):
 							print ('Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.zip')
 						else:
 							print ('Skipping previously downloaded album - ' + imgurID)
+					else:
+						print ('404')
 				else:
 					print('Skipping non-Imgur link')
 					
