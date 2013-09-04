@@ -65,11 +65,17 @@ def getUsername(user):
 
 						
 					if imgurType == 1:
-						urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.png')
-						print ('Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.png')
-					else:
-						urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.zip')
-						print ('Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.zip')
+						if not os.path.exists('./downloads/'+user+'/'+imgurID+'.png'):
+							urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.png')
+							print ('Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.png')
+						else:
+							print ('Skipping previously downloaded image - ' + imgurID)
+					elif imgurType == 2:
+						if not os.path.exists('./downloads/'+user+'/'+imgurID+'.zip'):
+							urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.zip')
+							print ('Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.zip')
+						else:
+							print ('Skipping previously downloaded album - ' + imgurID)
 				else:
 					print('Skipping non-Imgur link')
 					
