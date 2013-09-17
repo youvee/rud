@@ -31,13 +31,18 @@ def getUsername(user):
 				#1 - Straight-ahead image
 				#2 - .zip file
 				imgurID = ''
-				if i['data']['domain'] == 'i.imgur.com' or i['data']['domain'] == 'imgur.com':
+				if i['data']['domain'] == 'i.imgur.com' or i['data']['domain'] == 'imgur.com' or i['data']['domain'] == 'm.imgur.com':
 					if i['data']['domain'] == 'i.imgur.com':
 						imgurURL = i['data']['url']
 						imgurType = 1
 						imgurID = re.search('(?<=http://i.imgur.com/)[A-Za-z0-9]+', imgurURL).group(0)
 						#print imgurID
 						#print imgurURL
+					elif i['data']['domain'] == 'm.imgur.com':
+						imgurURL= i['data']['url']
+						imgurType = 1
+						imgurID = re.search('(?<=http://m.imgur.com/)[A-Za-z0-9]+', imgurURL).group(0)
+						imgurURL = 'http://i.imgur.com/' + imgurID + '.png'
 					elif i['data']['domain'] == 'imgur.com':
 						imgurURL = i['data']['url']
 						m = re.search('(?<=http://imgur.com/a/)[A-Za-z0-9]+', imgurURL)
