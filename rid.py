@@ -10,6 +10,11 @@ from urllib import urlretrieve
 user_agent = {'User-Agent': 'rid v0.1 by /u/manic0892 (github.com/Manic0892/rid)'}
 
 def getUsername(user):
+	print '- - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
+	#print '|'
+	print '| ' + user
+	#print '|'
+	print '- - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
 	baseURL = 'http://www.reddit.com/user/' + user + '/submitted.json?limit=100'
 	currURL = baseURL
 	
