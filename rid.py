@@ -40,7 +40,10 @@ def getUsername(user):
 					if i['data']['domain'] == 'i.imgur.com':
 						imgurURL = i['data']['url']
 						imgurType = 1
-						imgurID = re.search('(?<=http://i.imgur.com/)[A-Za-z0-9]+', imgurURL).group(0)
+						imgurID = re.search('(?<=http://i.imgur.com/)[A-Za-z0-9]+', imgurURL)
+						if imgurID is None:
+							imgurID = re.search('(?<=https://i.imgur.com/)[A-Za-z0-9]+', imgurURL)
+						imgurID = imgurID.group(0)
 						#print imgurID
 						#print imgurURL
 					elif i['data']['domain'] == 'm.imgur.com':
