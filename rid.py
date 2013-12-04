@@ -5,6 +5,7 @@ import sys
 import json
 import re
 import os
+import time
 from urllib import urlretrieve
 
 user_agent = {'User-Agent': 'rid v0.1 by /u/manic0892 (github.com/Manic0892/rid)'}
@@ -17,6 +18,12 @@ def getUsername(user):
 	print '- - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
 	baseURL = 'http://www.reddit.com/user/' + user + '/submitted.json?limit=100'
 	currURL = baseURL
+	
+	f = open('./downloads/'+user+'/__URLS.txt','a')
+	f.write('\n\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n')
+	f.write(time.strftime("%c") + '\n')
+	f.write('- - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n')
+	f.close()
 	
 	if not os.path.exists('./downloads/'+user):
 		os.makedirs('downloads/'+user)
@@ -92,7 +99,10 @@ def getUsername(user):
 					else:
 						print ('404')
 				else:
-					print('Skipping non-Imgur link')
+					f = open('./downloads/'+user+'/__URLS.txt','a')
+					f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
+					f.close() # you can omit in most cases as the destructor will call if
+					print('Skipping non-Imgur link.  Check __URLS.txt for a list of unsupported URLs not downloaded.')
 					
 					
 					
