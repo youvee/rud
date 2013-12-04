@@ -19,14 +19,13 @@ def getUsername(user):
 	baseURL = 'http://www.reddit.com/user/' + user + '/submitted.json?limit=100'
 	currURL = baseURL
 	
+	if not os.path.exists('./downloads/'+user):
+		os.makedirs('downloads/'+user)
 	f = open('./downloads/'+user+'/__URLS.txt','a')
 	f.write('\n\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n')
 	f.write(time.strftime("%c") + '\n')
 	f.write('- - - - - - - - - - - - - - - - - - - - - - - - - - - - -\n\n')
 	f.close()
-	
-	if not os.path.exists('./downloads/'+user):
-		os.makedirs('downloads/'+user)
 
 	while True:
 		r = requests.get(currURL, headers=user_agent)
