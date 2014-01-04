@@ -43,27 +43,21 @@ def getUsername(user):
 				#2 - .zip file
 				imgurID = ''
 				if i['data']['domain'] == 'i.imgur.com' or i['data']['domain'] == 'imgur.com' or i['data']['domain'] == 'm.imgur.com':
+					imgurURL = i['data']['url'].split('://')[1] #Strip out http(s) to avoid errors with http vs https
 					if i['data']['domain'] == 'i.imgur.com':
-						imgurURL = i['data']['url']
 						imgurType = 1
-						imgurID = re.search('(?<=http://i.imgur.com/)[A-Za-z0-9]+', imgurURL)
-						if imgurID is None:
-							imgurID = re.search('(?<=https://i.imgur.com/)[A-Za-z0-9]+', imgurURL)
+						imgurID = re.search('(?<=i.imgur.com/)[A-Za-z0-9]+', imgurURL)
 						imgurID = imgurID.group(0)
-						#print imgurID
-						#print imgurURL
 					elif i['data']['domain'] == 'm.imgur.com':
-						imgurURL= i['data']['url']
 						imgurType = 1
-						imgurID = re.search('(?<=http://m.imgur.com/)[A-Za-z0-9]+', imgurURL).group(0)
-						imgurURL = 'http://i.imgur.com/' + imgurID + '.png'
+						imgurID = re.search('(?<=m.imgur.com/)[A-Za-z0-9]+', imgurURL).group(0)
+						imgurURL = 'i.imgur.com/' + imgurID + '.png'
 					elif i['data']['domain'] == 'imgur.com':
-						imgurURL = i['data']['url']
-						m = re.search('(?<=http://imgur.com/a/)[A-Za-z0-9]+', imgurURL)
+						m = re.search('(?<=imgur.com/a/)[A-Za-z0-9]+', imgurURL)
 						if m is None:
-							m = re.search('(?<=http://imgur.com/)[A-Za-z0-9]+', imgurURL)
+							m = re.search('(?<=imgur.com/)[A-Za-z0-9]+', imgurURL)
 							if m is None:
-								m = re.search('(?<=http://imgur.com/gallery/)[A-Za-z0-9]+', imgurURL)
+								m = re.search('(?<=imgur.com/gallery/)[A-Za-z0-9]+', imgurURL)
 								if m is not None:
 									imgurType = 1
 							else:
@@ -74,29 +68,29 @@ def getUsername(user):
 						if m is not None:
 							imgurID = m.group(0)
 							if imgurType == 2:
-								imgurURL = 'http://s.imgur.com/a/' + imgurID + '/zip'
+								imgurURL = 's.imgur.com/a/' + imgurID + '/zip'
 							elif imgurType == 1:
-								imgurURL = 'http://i.imgur.com/'+imgurID+'.png'
+								imgurURL = 'i.imgur.com/'+imgurID+'.png'
 							else:
 								imgurType = 0
 						else:
 							imgurType = 0
 
-						
+					imgurURL = 'http://' + imgurURL #Un-strip http(s)
 					if imgurType == 1:
 						if not os.path.exists('./downloads/'+user+'/'+imgurID+'.png'):
-							urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.png')
 							print ('Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.png')
+							urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.png')
 						else:
 							print ('Skipping previously downloaded image - ' + imgurID)
 					elif imgurType == 2:
 						if not os.path.exists('./downloads/'+user+'/'+imgurID+'.zip'):
-							urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.zip')
 							print ('Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.zip')
+							urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.zip')
 						else:
 							print ('Skipping previously downloaded album - ' + imgurID)
 					else:
-						print ('404')
+						print ('404 - ' + imgurURL)
 				else:
 					f = open('./downloads/'+user+'/__URLS.txt','a')
 					f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
