@@ -92,10 +92,13 @@ def getUsername(user):
 					else:
 						print ('404 - ' + imgurURL)
 				else:
-					f = open('./downloads/'+user+'/__URLS.txt','a')
-					f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
-					f.close() # you can omit in most cases as the destructor will call if
-					print('Skipping non-Imgur link.  Check __URLS.txt for a list of unsupported URLs not downloaded.')
+					try:
+						f = open('./downloads/'+user+'/__URLS.txt','a')
+						f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
+						f.close() # you can omit in most cases as the destructor will call if
+						print('Skipping non-Imgur link.  Check __URLS.txt for a list of unsupported URLs not downloaded.')
+					except:
+						print('An error occurred when trying to add this non-Imgur link to __URLS.txt.')
 					
 					
 					
