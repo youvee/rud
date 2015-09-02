@@ -92,13 +92,26 @@ def getUsername(user):
 					else:
 						print ('404 - ' + imgurURL)
 				else:
-					try:
-						f = open('./downloads/'+user+'/__URLS.txt','a')
-						f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
-						f.close() # you can omit in most cases as the destructor will call if
-						print('Skipping non-Imgur link.  Check __URLS.txt for a list of unsupported URLs not downloaded.')
-					except:
-						print('An error occurred when trying to add this non-Imgur link to __URLS.txt.')
+					if i['data']['domain'] == 'gfycat.com':
+						gfycatURL = i['data']['url']
+						gfycatURL.replace('gfycat', 'giant.gfycat')
+						gfycatURL.strip('#')
+						gfycatID = re.search('(?<=gfycat.com/)[A-Za-z0-9]+', gfycatURL)
+						gfycatID = gfycatID.group(0)
+						gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
+						if not os.path.exists('./downloads/'+user+'/'+gfycatID+'.webm'):
+							print ('Downloading ' + gfycatID + ' from ' + gfycatURL + ' to ./downloads/'+user+'/'+gfycatID+'.webm')
+							urlretrieve(gfycatURL, './downloads/'+user+'/'+gfycatID+'.webm')
+						else:
+							print ('Skipping previously downloaded gfy - ' + gfycatID)
+					else:
+						try:
+							f = open('./downloads/'+user+'/__URLS.txt','a')
+							f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
+							f.close() # you can omit in most cases as the destructor will call if
+							print('Skipping non-Imgur link.  Check __URLS.txt for a list of unsupported URLs not downloaded.')
+						except:
+							print('An error occurred when trying to add this non-Imgur link to __URLS.txt.')
 					
 					
 					
