@@ -100,26 +100,27 @@ def getUsername(user):
 						gfycatID = re.search('(?<=gfycat.com/)[A-Za-z0-9]+', gfycatURL)
 						gfycatID = gfycatID.group(0)
 						gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
-						try:
-							urlopen(gfycatURL)
-						except HTTPError:
-							print('Error using giant link.  Switching to fat...')
+						if os.path.exists('./downloads/'+user+'/'+gfycatID+'.webm'):
+							print ('Skipping previously downloaded gfy - ' + gfycatID)
+						else:
 							try:
-								gfycatURL = 'http://fat.gfycat.com/' + gfycatID + '.webm'
 								urlopen(gfycatURL)
 							except HTTPError:
-								print ('Error using fat link.  Switching to zippy...')
+								print('Error using giant link.  Switching to fat...')
 								try:
-									gfycatURL = 'http://zippy.gfycat.com/' + gfycatID + '.webm'
+									gfycatURL = 'http://fat.gfycat.com/' + gfycatID + '.webm'
 									urlopen(gfycatURL)
 								except HTTPError:
-									print ('Tried to request ' + gfycatID + ' but encountered issues.  Downloading anyway using giant.')
-									gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
-						if not os.path.exists('./downloads/'+user+'/'+gfycatID+'.webm'):
+									print ('Error using fat link.  Switching to zippy...')
+									try:
+										gfycatURL = 'http://zippy.gfycat.com/' + gfycatID + '.webm'
+										urlopen(gfycatURL)
+									except HTTPError:
+										print ('Tried to request ' + gfycatID + ' but encountered issues.  Downloading anyway using giant.')
+										gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
+
 							print ('Downloading ' + gfycatID + ' from ' + gfycatURL + ' to ./downloads/'+user+'/'+gfycatID+'.webm')
-							urlretrieve(gfycatURL, './downloads/'+user+'/'+gfycatID+'.webm')
-						else:
-							print ('Skipping previously downloaded gfy - ' + gfycatID)
+							urlretrieve(gfycatURL, './downloads/'+user+'/'+gfycatID+'.webm')							
 					else:
 						try:
 							f = open('./downloads/'+user+'/__URLS.txt','a')
