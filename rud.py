@@ -9,7 +9,7 @@ import time
 from urllib import urlretrieve
 from urllib2 import urlopen, HTTPError
 
-user_agent = {'User-Agent': 'rid v0.1 by /u/manic0892 (github.com/Manic0892/rid)'}
+user_agent = {'User-Agent': 'rud v0.1 by /u/manic0892 (github.com/Manic0892/rid)'}
 
 def getUsername(user):
 	print '- - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
@@ -92,43 +92,42 @@ def getUsername(user):
 							print ('Skipping previously downloaded album - ' + imgurID)
 					else:
 						print ('404 - ' + imgurURL)
-				else:
-					if i['data']['domain'] == 'gfycat.com':
-						gfycatURL = i['data']['url']
-						gfycatURL.replace('gfycat', 'giant.gfycat')
-						gfycatURL.strip('#')
-						gfycatID = re.search('(?<=gfycat.com/)[A-Za-z0-9]+', gfycatURL)
-						gfycatID = gfycatID.group(0)
-						gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
-						if os.path.exists('./downloads/'+user+'/'+gfycatID+'.webm'):
-							print ('Skipping previously downloaded gfy - ' + gfycatID)
-						else:
-							try:
-								urlopen(gfycatURL)
-							except HTTPError:
-								print('Error using giant link.  Switching to fat...')
-								try:
-									gfycatURL = 'http://fat.gfycat.com/' + gfycatID + '.webm'
-									urlopen(gfycatURL)
-								except HTTPError:
-									print ('Error using fat link.  Switching to zippy...')
-									try:
-										gfycatURL = 'http://zippy.gfycat.com/' + gfycatID + '.webm'
-										urlopen(gfycatURL)
-									except HTTPError:
-										print ('Tried to request ' + gfycatID + ' but encountered issues.  Downloading anyway using giant.')
-										gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
-
-							print ('Downloading ' + gfycatID + ' from ' + gfycatURL + ' to ./downloads/'+user+'/'+gfycatID+'.webm')
-							urlretrieve(gfycatURL, './downloads/'+user+'/'+gfycatID+'.webm')							
+				elif i['data']['domain'] == 'gfycat.com':
+					gfycatURL = i['data']['url']
+					gfycatURL.replace('gfycat', 'giant.gfycat')
+					gfycatURL.strip('#')
+					gfycatID = re.search('(?<=gfycat.com/)[A-Za-z0-9]+', gfycatURL)
+					gfycatID = gfycatID.group(0)
+					gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
+					if os.path.exists('./downloads/'+user+'/'+gfycatID+'.webm'):
+						print ('Skipping previously downloaded gfy - ' + gfycatID)
 					else:
 						try:
-							f = open('./downloads/'+user+'/__URLS.txt','a')
-							f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
-							f.close() # you can omit in most cases as the destructor will call if
-							print('Skipping non-Imgur link.  Check __URLS.txt for a list of unsupported URLs not downloaded.')
-						except:
-							print('An error occurred when trying to add this non-Imgur link to __URLS.txt.')
+							urlopen(gfycatURL)
+						except HTTPError:
+							print('Error using giant link.  Switching to fat...')
+							try:
+								gfycatURL = 'http://fat.gfycat.com/' + gfycatID + '.webm'
+								urlopen(gfycatURL)
+							except HTTPError:
+								print ('Error using fat link.  Switching to zippy...')
+								try:
+									gfycatURL = 'http://zippy.gfycat.com/' + gfycatID + '.webm'
+									urlopen(gfycatURL)
+								except HTTPError:
+									print ('Tried to request ' + gfycatID + ' but encountered issues.  Downloading anyway using giant.')
+									gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
+
+						print ('Downloading ' + gfycatID + ' from ' + gfycatURL + ' to ./downloads/'+user+'/'+gfycatID+'.webm')
+						urlretrieve(gfycatURL, './downloads/'+user+'/'+gfycatID+'.webm')
+				else:
+					try:
+						f = open('./downloads/'+user+'/__URLS.txt','a')
+						f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
+						f.close() # you can omit in most cases as the destructor will call if
+						print('Skipping non-Imgur link.  Check __URLS.txt for a list of unsupported URLs not downloaded.')
+					except:
+						print('An error occurred when trying to add this non-Imgur link to __URLS.txt.')
 					
 					
 					
