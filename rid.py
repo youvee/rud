@@ -7,6 +7,7 @@ import re
 import os
 import time
 from urllib import urlretrieve
+from urllib2 import urlopen, HTTPError
 
 user_agent = {'User-Agent': 'rid v0.1 by /u/manic0892 (github.com/Manic0892/rid)'}
 
@@ -99,6 +100,21 @@ def getUsername(user):
 						gfycatID = re.search('(?<=gfycat.com/)[A-Za-z0-9]+', gfycatURL)
 						gfycatID = gfycatID.group(0)
 						gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
+						try:
+							urlopen(gfycatURL)
+						except HTTPError:
+							print('Error using giant link.  Switching to fat...')
+							try:
+								gfycatURL = 'http://fat.gfycat.com/' + gfycatID + '.webm'
+								urlopen(gfycatURL)
+							except HTTPError:
+								print ('Error using fat link.  Switching to zippy...')
+								try:
+									gfycatURL = 'http://zippy.gfycat.com/' + gfycatID + '.webm'
+									urlopen(gfycatURL)
+								except HTTPError:
+									print ('Tried to request ' + gfycatID + ' but encountered issues.  Downloading anyway using giant.')
+									gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
 						if not os.path.exists('./downloads/'+user+'/'+gfycatID+'.webm'):
 							print ('Downloading ' + gfycatID + ' from ' + gfycatURL + ' to ./downloads/'+user+'/'+gfycatID+'.webm')
 							urlretrieve(gfycatURL, './downloads/'+user+'/'+gfycatID+'.webm')
