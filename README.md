@@ -4,6 +4,13 @@
 ###Usage
     ./rud.py username1 username2 username3 username4 ...
 
+###Executables
+Make sure to read the README.txt included with each executable.
+
+- Windows (coming soon)
+- Mac OSX (coming soon)
+- Linux (coming soon)
+
 ###Introduction
 This Python script downloads all supported files that are on a user's /submitted page.
 
