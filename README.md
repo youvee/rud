@@ -1,11 +1,11 @@
-# rud
+# rud (Reddit User Downloader)
 ---
 
 ###Usage
     ./rud.py username1 username2 username3 username4 ...
 
 ###Introduction
-Reddit User Downloader.  Downloads all supported files that are on a user's /submitted page.
+This Python script downloads all supported files that are on a user's /submitted page.
 
 #####Supported Sites
 - [Gfycat](http://gfycat.com/)
