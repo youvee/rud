@@ -34,7 +34,43 @@ def vid_me(i, user):
 		else:
 			print (colors.OKBLUE + 'Skipping previously downloaded vid - ' + vid_meID + colors.ENDC)
 
-# def vidible(i, user):
+def vidbleAlbum(i, user, vidbleID, vidbleURL):
+	if not os.path.exists('./downloads/' + user + '/' + vidbleID):
+		print (colors.OKGREEN + 'Downloading ' + vidbleID + ' from ' + vidbleURL + ' to ./downloads/'+user+'/'+vidbleID + colors.ENDC)
+		os.makedirs('./downloads/' + user + '/' + vidbleID)
+	else:
+		print (colors.OKBLUE + 'Downloading previously downloaded vidble album - ' + vidbleID)
+	vidbleJSONURL = vidbleURL + '?json=1'
+	r = requests.get(vidbleJSONURL, headers=user_agent)
+	data = r.text;
+	data = json.loads(data)
+	for j in data['pics']:
+		vidbleImageID = re.search('(?<=vidble.com/)[A-Za-z0-9]+', j)
+		vidbleImageID = vidbleImageID.group(0)
+		vidbleImageURL = 'http:' + j
+		if not os.path.exists('./downloads/' + user + '/' + vidbleID + '/' + vidbleImageID + '.jpg'):
+			print (colors.OKGREEN + ' - Downloading ' + vidbleImageID + ' from ' + vidbleImageURL + ' to ./downloads/'+user+'/'+vidbleID + '/' + vidbleImageID + '.jpg' + colors.ENDC)
+			urlretrieve(vidbleImageURL, './downloads/'+user+'/'+vidbleID + '/' + vidbleImageID + '.jpg')
+		else:
+			print (colors.OKBLUE + ' - Skipping previously downloaded vidble image - ' + vidbleImageID + colors.ENDC)
+
+def vidble(i, user):
+	vidbleURL = i['data']['url']
+	vidbleID = re.search('(?<=vidble.com/album/)[A-Za-z0-9]+', vidbleURL)
+	if vidbleID is not None:
+			vidbleID = vidbleID.group(0)
+			vidbleAlbum(i, user, vidbleID, vidbleURL)
+	else:
+		vidbleID = re.search('(?<=vidble.com/)[A-Za-z0-9]+', vidbleURL)
+		if vidbleID is not None:
+			vidbleID = vidbleID.group(0)
+			if not os.path.exists('./downloads/'+user+'/'+vidbleID+'.jpg'):
+				print (colors.OKGREEN + 'Downloading ' + vidbleID + ' from ' + vidbleURL + ' to ./downloads/'+user+'/'+vidbleID+'.jpg' + colors.ENDC)
+				urlretrieve(vidbleURL, './downloads/'+user+'/'+vidbleID+'.jpg')
+			else:
+				print (colors.OKBLUE + 'Skipping previously downloaded vidble image - ' + vidbleID + colors.ENDC)
+		else:
+			print (colors.FAIL + 'An error occurred in downloading ' + vidbleURL + colors.ENDC)
 
 
 def imgur(i, user):
@@ -84,13 +120,13 @@ def imgur(i, user):
 			print (colors.OKGREEN + 'Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.png' + colors.ENDC)
 			urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.png')
 		else:
-			print (colors.OKBLUE + 'Skipping previously downloaded image - ' + imgurID + colors.ENDC)
+			print (colors.OKBLUE + 'Skipping previously downloaded Imgur image - ' + imgurID + colors.ENDC)
 	elif imgurType == 2:
 		if not os.path.exists('./downloads/'+user+'/'+imgurID+'.zip'):
 			print (colors.OKGREEN + 'Downloading ' + imgurID + ' from ' + imgurURL + ' to ./downloads/'+user+'/'+imgurID+'.zip' + colors.ENDC)
 			urlretrieve(imgurURL, './downloads/'+user+'/'+imgurID+'.zip')
 		else:
-			print (colors.OKBLUE + 'Skipping previously downloaded album - ' + imgurID + colors.ENDC)
+			print (colors.OKBLUE + 'Skipping previously downloaded Imgur album - ' + imgurID + colors.ENDC)
 	else:
 		print (colors.FAIL + '404 - ' + imgurURL + colors.ENDC)
 
@@ -154,6 +190,8 @@ def getUsername(user):
 					gfycat(i, user)
 				elif i['data']['domain'] == 'vid.me':
 					vid_me(i, user)
+				elif i['data']['domain'] == 'vidble.com':
+					vidble(i, user)
 				else:
 					try:
 						f = open('./downloads/'+user+'/__URLS.txt','a')
