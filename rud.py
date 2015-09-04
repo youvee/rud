@@ -9,7 +9,12 @@ import time
 from urllib import urlretrieve
 from urllib2 import urlopen, HTTPError
 
-user_agent = {'User-Agent': 'rud v0.1 by /u/manic0892 (github.com/Manic0892/rid)'}
+user_agent = {'User-Agent': 'rud v0.2 by /u/manic0892 (github.com/Manic0892/rid)'}
+
+# def vid_me(i, user):
+
+# def vidible(i, user):
+
 
 def imgur(i, user):
 	imgurURL = ''
@@ -140,8 +145,6 @@ def getUsername(user):
 					#print i['data']['title']
 				#elif i['data']['domain'] == 'imgur.com':
 			currURL = baseURL + '&after=' + data['data']['children'][-1]['data']['name']
-
-#def getImgurDL
 
 if not os.path.exists('./downloads'):
 	os.makedirs('./downloads')
