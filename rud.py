@@ -8,6 +8,7 @@ import os
 import time
 from urllib import urlretrieve
 from urllib2 import urlopen, HTTPError
+import lxml.html
 
 user_agent = {'User-Agent': 'rud v0.2 by /u/manic0892 (github.com/Manic0892/rid)'}
 
@@ -21,7 +22,17 @@ class colors:
 	BOLD = '\033[1m'
 	UNDERLINE = '\033[4m'
 
-# def vid_me(i, user):
+def vid_me(i, user):
+	vid_meURL = i['data']['url']
+	vid_meID = re.search('(?<=vid.me/)[A-Za-z0-9]+', vid_meURL)
+	vid_meID = vid_meID.group(0)
+	links = lxml.html.parse(urlopen(vid_meURL)).xpath("//source/@src")
+	for link in links:
+		if not os.path.exists('./downloads/'+user+'/'+vid_meID+'.mp4'):
+			print (colors.OKGREEN + 'Downloading ' + vid_meID + ' from ' + vid_meURL + ' to ./downloads/'+user+'/'+vid_meID+'.mp4' + colors.ENDC)
+			urlretrieve(link, './downloads/'+user+'/'+vid_meID+'.mp4')
+		else:
+			print (colors.OKBLUE + 'Skipping previously downloaded vid - ' + vid_meID + colors.ENDC)
 
 # def vidible(i, user):
 
@@ -141,14 +152,16 @@ def getUsername(user):
 					imgur(i, user)
 				elif i['data']['domain'] == 'gfycat.com':
 					gfycat(i, user)
+				elif i['data']['domain'] == 'vid.me':
+					vid_me(i, user)
 				else:
 					try:
 						f = open('./downloads/'+user+'/__URLS.txt','a')
 						f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
 						f.close() # you can omit in most cases as the destructor will call if
-						print (colors.WARNING + 'Skipping non-Imgur link.  Check __URLS.txt for a list of unsupported URLs not downloaded.' + colors.ENDC)
+						print (colors.WARNING + 'Skipping unsupported link.  Check __URLS.txt for a list of unsupported URLs not downloaded.' + colors.ENDC)
 					except:
-						print(colors.FAIL + 'An error occurred when trying to add this non-Imgur link to __URLS.txt.' + colors.ENDC)
+						print(colors.FAIL + 'An error occurred when trying to add this unsupported link to __URLS.txt.' + colors.ENDC)
 					
 			currURL = baseURL + '&after=' + data['data']['children'][-1]['data']['name']
 
