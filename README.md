@@ -8,7 +8,7 @@
 Make sure to read the README.txt included with each executable.
 
 - Windows (coming soon)
-- Mac OSX (coming soon)
+- [Mac OSX](https://github.com/Manic0892/rud/releases/download/v0.2/rud-mac.zip)
 - Linux (coming soon)
 
 ###Introduction
