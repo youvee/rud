@@ -7,7 +7,7 @@
 ###Executables
 Make sure to read the README.txt included with each executable.
 
-- Windows (coming soon)
+- [Windows](https://github.com/Manic0892/rud/releases/download/v0.2/rud-win.zip)
 - [Mac OSX](https://github.com/Manic0892/rud/releases/download/v0.2/rud-mac.zip)
 - Linux (coming soon)
 
