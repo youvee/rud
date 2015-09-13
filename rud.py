@@ -76,11 +76,11 @@ def imgur(i, user):
 		imgurType = 1
 		imgurID = re.search('(?<=i.imgur.com/)[A-Za-z0-9]+', imgurURL)
 		imgurID = imgurID.group(0)
-	elif i['data']['domain'] == 'm.imgur.com':
-		imgurType = 1
-		imgurID = re.search('(?<=m.imgur.com/)[A-Za-z0-9]+', imgurURL).group(0)
-		imgurURL = 'i.imgur.com/' + imgurID + '.png'
-	elif i['data']['domain'] == 'imgur.com':
+	# elif i['data']['domain'] == 'm.imgur.com':
+	# 	imgurType = 1
+	# 	imgurID = re.search('(?<=m.imgur.com/)[A-Za-z0-9]+', imgurURL).group(0)
+	# 	imgurURL = 'i.imgur.com/' + imgurID + '.png'
+	elif i['data']['domain'] == 'imgur.com' or i['data']['domain'] == 'm.imgur.com':
 		m = re.search('(?<=imgur.com/a/)[A-Za-z0-9]+', imgurURL)
 		if m is None:
 			m = re.search('(?<=imgur.com/)[A-Za-z0-9]+', imgurURL)
