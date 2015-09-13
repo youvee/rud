@@ -7,9 +7,8 @@
 ###Executables
 Make sure to read the README.txt included with each executable.
 
-- [Windows](https://github.com/Manic0892/rud/releases/download/v0.2/rud-win.zip)
-- [Mac OSX](https://github.com/Manic0892/rud/releases/download/v0.2/rud-mac.zip)
-- Linux (coming soon)
+ - [Windows](https://github.com/Manic0892/rud/releases/download/v0.2/rud-win.zip)
+ - [Mac OSX](https://github.com/Manic0892/rud/releases/download/v0.2/rud-mac.zip)
 
 ###Introduction
 This Python script downloads all supported files that are on a user's /submitted page.
