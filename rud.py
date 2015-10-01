@@ -121,6 +121,17 @@ def imgur(i, user):
 		print (colors.FAIL + '404 - ' + imgurURL + colors.ENDC)
 
 
+# Downloads links from Sendvid
+
+def sendvid(i, user):
+	sendvidURL = i['data']['url']
+	sendvidID = re.search('(?<=sendvid.com/)[A-Za-z0-9]+', sendvidURL)
+	sendvidID = sendvidID.group(0)
+	if not os.path.exists('./downloads/'+user+'/'+sendvidID+'.mp4'):
+		print(colors.OKGREEN + 'Downloading ' + sendvidID + ' from ' + sendvidURL + ' to ./downloads/'+user+'/'+sendvidID+'.mp4' + colors.ENDC)
+		urlretrieve('http://sendvid.com/'+sendvidID+'.mp4', './downloads/'+user+'/'+sendvidID+'.mp4')
+	else:
+		print(colors.OKBLUE + 'Skipping previously downloaded Sendvid - ' + vid_meID + colors.ENDC)
 
 # Downloads links from vid.me.
 def vid_me(i, user):
@@ -212,6 +223,8 @@ def getUsername(user):
 					imgur(i, user)
 				elif i['data']['domain'] == 'gfycat.com':
 					gfycat(i, user)
+				elif i['data']['domain'] == 'sendvid.com':
+					sendvid(i, user)
 				elif i['data']['domain'] == 'vid.me':
 					vid_me(i, user)
 				elif i['data']['domain'] == 'vidble.com':
