@@ -16,6 +16,7 @@ This Python script downloads all supported files that are on a user's /submitted
 #####Supported Sites
 - [Gfycat](http://gfycat.com/)
 - [Imgur](http://imgur.com/)
+- [Sendvid](http://sendvid.com/)
 - [Vidble](http://vidble.com/)
 - [vidme](https://vid.me/)
 
