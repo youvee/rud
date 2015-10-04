@@ -61,7 +61,6 @@ def gfycat(i, user):
 		urlretrieve(gfycatURL, './downloads/'+user+'/'+gfycatID+'.webm')
 
 
-
 # Downloads links from Imgur.
 def imgur(i, user):
 	imgurURL = ''
@@ -122,7 +121,6 @@ def imgur(i, user):
 
 
 # Downloads links from Sendvid
-
 def sendvid(i, user):
 	sendvidURL = i['data']['url']
 	sendvidID = re.search('(?<=sendvid.com/)[A-Za-z0-9]+', sendvidURL)
@@ -132,6 +130,7 @@ def sendvid(i, user):
 		urlretrieve('http://sendvid.com/'+sendvidID+'.mp4', './downloads/'+user+'/'+sendvidID+'.mp4')
 	else:
 		print(colors.OKBLUE + 'Skipping previously downloaded Sendvid - ' + vid_meID + colors.ENDC)
+
 
 # Downloads links from vid.me.
 def vid_me(i, user):
@@ -145,7 +144,6 @@ def vid_me(i, user):
 			urlretrieve(link, './downloads/'+user+'/'+vid_meID+'.mp4')
 		else:
 			print (colors.OKBLUE + 'Skipping previously downloaded vid - ' + vid_meID + colors.ENDC)
-
 
 
 # Downloads all images in a Vidble album.
