@@ -15,7 +15,7 @@ This Python script downloads all supported files that are on a user's /submitted
 - [vidme](https://vid.me/)
 
 #####Downloading from other sites
-If you want to download from other sites, you can write (or find) a module that will do it for you.  Create a `modules` directory in the same directory as the `rud.py` file.  Any Python script with a `domain` variable and a `process(i, user, colors)` function can be used as a module.  Check the `default_modules` directory for examples of how modules are written and used.
+If you want to download from other sites, you can write (or find) a module that will do it for you.  Any Python script with a `domain` variable and a `process(i, user, colors)` function can be used as a module.  Simply place the python script into the `modules` directory to load it with RUD at runtime.  Check the `modules` directory for examples of how modules are written and used.
 
 ###Requirements
 **Python**.  No modules not included in the Python standard libraries were used.
