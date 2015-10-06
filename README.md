@@ -4,21 +4,18 @@
 ###Usage
     ./rud.py username1 username2 username3 username4 ...
 
-###Executables
-Make sure to read the README.txt included with each executable.
-
- - [Windows](https://github.com/Manic0892/rud/releases/download/v0.2/rud-win.zip)
- - [Mac OSX](https://github.com/Manic0892/rud/releases/download/v0.2/rud-mac.zip)
-
 ###Introduction
 This Python script downloads all supported files that are on a user's /submitted page.
 
-#####Supported Sites
+#####Supported sites
 - [Gfycat](http://gfycat.com/)
 - [Imgur](http://imgur.com/)
 - [Sendvid](http://sendvid.com/)
 - [Vidble](http://vidble.com/)
 - [vidme](https://vid.me/)
+
+#####Downloading from other sites
+If you want to download from other sites, you can write (or find) a module that will do it for you.  Create a `modules` directory in the same directory as the `rud.py` file.  Any Python script with a `domain` variable and a `process(i, user, colors)` function can be used as a module.  Check the `default_modules` directory for examples of how modules are written and used.
 
 ###Requirements
 **Python**.  No modules not included in the Python standard libraries were used.
