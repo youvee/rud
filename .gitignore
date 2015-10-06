@@ -2,3 +2,4 @@
 /downloads
 /modules
 modules.txt
+*.pyc
