@@ -33,45 +33,23 @@ class colors:
 # Loads additional modules
 modules = []
 
-if os.path.exists('modules.txt'):
-	if os.path.exists('./modules/'):
-		f = open('modules.txt')
-		for i in f.readlines():
-			i = i.strip('\n')
-			print("Loading module: " + i)
-			module = imp.load_source(i, './modules/' + i + '.py')
-			modules.append(module)
+if os.path.exists('./default_modules'):
+	for i in os.listdir('./default_modules'):
+		if not i.endswith('.py'):
+			continue
+		i = i.strip('.py')
+		print(colors.HEADER + "Loading default module: " + i + colors.ENDC)
+		module = imp.load_source(i, './default_modules/' + i + '.py')
+		modules.append(module)
 
-
-# Downloads links from Gfycat
-def gfycat(i, user):
-	gfycatURL = i['data']['url']
-	gfycatURL.replace('gfycat', 'giant.gfycat')
-	gfycatURL.strip('#')
-	gfycatID = re.search('(?<=gfycat.com/)[A-Za-z0-9]+', gfycatURL)
-	gfycatID = gfycatID.group(0)
-	gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
-	if os.path.exists('./downloads/'+user+'/'+gfycatID+'.webm'):
-		print (colors.OKBLUE + 'Skipping previously downloaded gfy - ' + gfycatID + colors.ENDC)
-	else:
-		try:
-			urlopen(gfycatURL)
-		except HTTPError:
-			print(colors.FAIL + 'Error using giant link.  Switching to fat...' + colors.ENDC)
-			try:
-				gfycatURL = 'http://fat.gfycat.com/' + gfycatID + '.webm'
-				urlopen(gfycatURL)
-			except HTTPError:
-				print (colors.FAIL + 'Error using fat link.  Switching to zippy...' + colors.ENDC)
-				try:
-					gfycatURL = 'http://zippy.gfycat.com/' + gfycatID + '.webm'
-					urlopen(gfycatURL)
-				except HTTPError:
-					print (colors.FAIL + 'Tried to request ' + gfycatID + ' but encountered issues.  Downloading anyway using giant.' + colors.ENDC)
-					gfycatURL = 'http://giant.gfycat.com/' + gfycatID + '.webm'
-
-		print (colors.OKGREEN + 'Downloading ' + gfycatID + ' from ' + gfycatURL + ' to ./downloads/'+user+'/'+gfycatID+'.webm' + colors.ENDC)
-		urlretrieve(gfycatURL, './downloads/'+user+'/'+gfycatID+'.webm')
+if os.path.exists('./modules/'):
+	for i in os.listdir('./modules'):
+		if not i.endswith('.py'):
+			continue
+		i = i.strip('.py')
+		print(colors.HEADER + "Loading module: " + i + colors.ENDC)
+		module = imp.load_source(i, './modules/' + i + '.py')
+		modules.append(module)
 
 
 # Downloads links from Imgur.
@@ -133,76 +111,6 @@ def imgur(i, user):
 		print (colors.FAIL + '404 - ' + imgurURL + colors.ENDC)
 
 
-# Downloads links from Sendvid
-def sendvid(i, user):
-	sendvidURL = i['data']['url']
-	sendvidID = re.search('(?<=sendvid.com/)[A-Za-z0-9]+', sendvidURL)
-	sendvidID = sendvidID.group(0)
-	if not os.path.exists('./downloads/'+user+'/'+sendvidID+'.mp4'):
-		print(colors.OKGREEN + 'Downloading ' + sendvidID + ' from ' + sendvidURL + ' to ./downloads/'+user+'/'+sendvidID+'.mp4' + colors.ENDC)
-		urlretrieve('http://sendvid.com/'+sendvidID+'.mp4', './downloads/'+user+'/'+sendvidID+'.mp4')
-	else:
-		print(colors.OKBLUE + 'Skipping previously downloaded Sendvid - ' + vid_meID + colors.ENDC)
-
-
-# Downloads links from vid.me.
-def vid_me(i, user):
-	vid_meURL = i['data']['url']
-	vid_meID = re.search('(?<=vid.me/)[A-Za-z0-9]+', vid_meURL)
-	vid_meID = vid_meID.group(0)
-	links = lxml.html.parse(urlopen(vid_meURL)).xpath("//source/@src")
-	for link in links:
-		if not os.path.exists('./downloads/'+user+'/'+vid_meID+'.mp4'):
-			print (colors.OKGREEN + 'Downloading ' + vid_meID + ' from ' + vid_meURL + ' to ./downloads/'+user+'/'+vid_meID+'.mp4' + colors.ENDC)
-			urlretrieve(link, './downloads/'+user+'/'+vid_meID+'.mp4')
-		else:
-			print (colors.OKBLUE + 'Skipping previously downloaded vid - ' + vid_meID + colors.ENDC)
-
-
-# Downloads all images in a Vidble album.
-def vidbleAlbum(i, user, vidbleID, vidbleURL):
-	if not os.path.exists('./downloads/' + user + '/' + vidbleID):
-		print (colors.OKGREEN + 'Downloading ' + vidbleID + ' from ' + vidbleURL + ' to ./downloads/'+user+'/'+vidbleID + colors.ENDC)
-		os.makedirs('./downloads/' + user + '/' + vidbleID)
-	else:
-		print (colors.OKBLUE + 'Downloading previously downloaded vidble album - ' + vidbleID)
-	vidbleJSONURL = vidbleURL + '?json=1'
-	r = requests.get(vidbleJSONURL, headers=user_agent)
-	data = r.text;
-	data = json.loads(data)
-	for j in data['pics']:
-		vidbleImageID = re.search('(?<=vidble.com/)[A-Za-z0-9]+', j)
-		vidbleImageID = vidbleImageID.group(0)
-		vidbleImageURL = 'http:' + j
-		if not os.path.exists('./downloads/' + user + '/' + vidbleID + '/' + vidbleImageID + '.jpg'):
-			print (colors.OKGREEN + ' - Downloading ' + vidbleImageID + ' from ' + vidbleImageURL + ' to ./downloads/'+user+'/'+vidbleID + '/' + vidbleImageID + '.jpg' + colors.ENDC)
-			urlretrieve(vidbleImageURL, './downloads/'+user+'/'+vidbleID + '/' + vidbleImageID + '.jpg')
-		else:
-			print (colors.OKBLUE + ' - Skipping previously downloaded vidble image - ' + vidbleImageID + colors.ENDC)
-
-
-
-# Downloads links from Vidble, calling vidbleAlbum if the linked item is an album of images and not just a single image.
-def vidble(i, user):
-	vidbleURL = i['data']['url']
-	vidbleID = re.search('(?<=vidble.com/album/)[A-Za-z0-9]+', vidbleURL)
-	if vidbleID is not None:
-			vidbleID = vidbleID.group(0)
-			vidbleAlbum(i, user, vidbleID, vidbleURL)
-	else:
-		vidbleID = re.search('(?<=vidble.com/)[A-Za-z0-9]+', vidbleURL)
-		if vidbleID is not None:
-			vidbleID = vidbleID.group(0)
-			if not os.path.exists('./downloads/'+user+'/'+vidbleID+'.jpg'):
-				print (colors.OKGREEN + 'Downloading ' + vidbleID + ' from ' + vidbleURL + ' to ./downloads/'+user+'/'+vidbleID+'.jpg' + colors.ENDC)
-				urlretrieve(vidbleURL, './downloads/'+user+'/'+vidbleID+'.jpg')
-			else:
-				print (colors.OKBLUE + 'Skipping previously downloaded vidble image - ' + vidbleID + colors.ENDC)
-		else:
-			print (colors.FAIL + 'An error occurred in downloading ' + vidbleURL + colors.ENDC)
-
-
-
 # For each user listed when the script was launched, this function is called to crawl through their /submitted page and collect links.
 def getUsername(user):
 	print '- - - - - - - - - - - - - - - - - - - - - - - - - - - - -'
@@ -232,18 +140,10 @@ def getUsername(user):
 				# Checks each link to see if the domain is supported
 				if i['data']['domain'] == 'i.imgur.com' or i['data']['domain'] == 'imgur.com' or i['data']['domain'] == 'm.imgur.com':
 					imgur(i, user)
-				elif i['data']['domain'] == 'gfycat.com':
-					gfycat(i, user)
-				elif i['data']['domain'] == 'sendvid.com':
-					sendvid(i, user)
-				elif i['data']['domain'] == 'vid.me':
-					vid_me(i, user)
-				elif i['data']['domain'] == 'vidble.com':
-					vidble(i, user)
 				elif len(modules) > 0:
 					for j in modules:
 						if i['data']['domain'] == j.domain:
-							j.process(i, user)
+							j.process(i, user, colors)
 							break
 				else:
 					try:
