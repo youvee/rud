@@ -1,5 +1,14 @@
+# Mac-specific
 .DS_Store
-/downloads
-/modules
-modules.txt
+# No need to keep compiled python files
 *.pyc
+# Don't want this cluttering pull requests
+downloads/
+
+# Ignore modules
+modules/*
+# Un-ignore default modules
+!modules/gfycat.py
+!modules/sendvid.py
+!modules/vid_me.py
+!modules/vidble.py
