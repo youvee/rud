@@ -14,7 +14,7 @@ import imp 								# imp.load_source()				-- Load modules dynamically
 
 
 # The user agent required by Reddit, which is used in requests.
-user_agent = {'User-Agent': 'rud v0.3.2 by /u/manic0892 (github.com/Manic0892/rid)'}
+user_agent = {'User-Agent': 'rud v0.3.3 by /u/manic0892 (github.com/Manic0892/rid)'}
 
 
 
