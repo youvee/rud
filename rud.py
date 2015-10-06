@@ -9,6 +9,7 @@ import time								# time.strftime					-- Formatted string of system time
 from urllib import urlretrieve			# urlretrieve					-- Download from URL to local machine
 from urllib2 import urlopen, HTTPError	# urlopen, HTTPError			-- Web page access, HTTP errors
 import lxml.html						# lxml.html						-- HTML parsing
+import imp 								# imp.load_source()				-- Load modules dynamically
 
 
 
@@ -28,6 +29,18 @@ class colors:
 	BOLD = '\033[1m'
 	UNDERLINE = '\033[4m'
 
+
+# Loads additional modules
+modules = []
+
+if os.path.exists('modules.txt'):
+	if os.path.exists('./modules/'):
+		f = open('modules.txt')
+		for i in f.readlines():
+			i = i.strip('\n')
+			print("Loading module: " + i)
+			module = imp.load_source(i, './modules/' + i + '.py')
+			modules.append(module)
 
 
 # Downloads links from Gfycat
@@ -227,6 +240,11 @@ def getUsername(user):
 					vid_me(i, user)
 				elif i['data']['domain'] == 'vidble.com':
 					vidble(i, user)
+				elif len(modules) > 0:
+					for j in modules:
+						if i['data']['domain'] == j.domain:
+							j.process(i, user)
+							break
 				else:
 					try:
 						f = open('./downloads/'+user+'/__URLS.txt','a')
@@ -237,8 +255,6 @@ def getUsername(user):
 						print(colors.FAIL + 'An error occurred when trying to add this unsupported link to __URLS.txt.' + colors.ENDC)
 					
 			currURL = baseURL + '&after=' + data['data']['children'][-1]['data']['name']
-
-
 
 # Creates the downloads folder if one does not exist.
 if not os.path.exists('./downloads'):
