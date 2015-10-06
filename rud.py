@@ -33,15 +33,6 @@ class colors:
 # Loads additional modules
 modules = []
 
-if os.path.exists('./default_modules'):
-	for i in os.listdir('./default_modules'):
-		if not i.endswith('.py'):
-			continue
-		i = i.strip('.py')
-		print(colors.HEADER + "Loading default module: " + i + colors.ENDC)
-		module = imp.load_source(i, './default_modules/' + i + '.py')
-		modules.append(module)
-
 if os.path.exists('./modules/'):
 	for i in os.listdir('./modules'):
 		if not i.endswith('.py'):
@@ -140,12 +131,17 @@ def getUsername(user):
 				# Checks each link to see if the domain is supported
 				if i['data']['domain'] == 'i.imgur.com' or i['data']['domain'] == 'imgur.com' or i['data']['domain'] == 'm.imgur.com':
 					imgur(i, user)
-				elif len(modules) > 0:
-					for j in modules:
-						if i['data']['domain'] == j.domain:
-							j.process(i, user, colors)
-							break
-				else:
+					continue
+
+				supportedByModule = False
+
+				for j in modules:
+					if i['data']['domain'] == j.domain:
+						j.process(i, user, colors)
+						supportedByModule = True
+						break
+
+				if not supportedByModule:
 					try:
 						f = open('./downloads/'+user+'/__URLS.txt','a')
 						f.write(i['data']['url'] + '\n') # python will convert \n to os.linesep
